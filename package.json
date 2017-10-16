@@ -27,5 +27,9 @@
     "thrift": "^0.9.3",
     "thrift-http": "^1.0.1",
     "unirest": "^0.5.0"
+  },
+    "engines": {
+    "node": "8.5.0",
+    "npm": "5.3.0"
   }
 }
