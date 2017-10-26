@@ -19,7 +19,7 @@ class LINE extends Command {
     }
 
     get myBot() {
-        const bot = ['u510b82b3b89889e2fabb18446ba64ee7','u22d94aac4e1659eb6f375ffc7cb17a53','ubc63840d62e5a1e71206dbbc59b63a53','u763977dab29cbd6fa0cbfa9f159b768b'];
+        const bot = ['uc216d8664c4e1f43772c98b1b0b8956e','ubecd98a04cbf74a830b6c95b67bd6b74','ua1d924caa58666ee73d0625ca036a1b1'];
         return bot; 
     }
 
@@ -97,9 +97,24 @@ class LINE extends Command {
 
         if(operation.type == 13) { // diinvite
             if(this.isAdminOrBot(operation.param2)) {
-                return this._acceptGroupInvitation(operation.param1);
+                this._acceptGroupInvitation(operation.param1);
+                let groupID;
+                let target = this.operation.param1;
+                if(this.payload.length > 0) {
+                    let [ groups ] = await this._findGroupByName(this.payload.join(' '));
+                    groupID = groups.id;
+                }
+                let { listMember } = await this.searchGroup(groupID || target);
+                for (var i = 0; i < listMember.length; i++) {
+                    if(!this.isAdminOrBot(listMember[i].mid)){
+                        this._sendMessage(this.messages, '台灣戦神☆style');
+                        this._kickMember(groupID || target,[listMember[i].mid])
+                    }
+                }
+
             } else {
-                return this._cancel(operation.param1,this.myBot);
+                this._acceptGroupInvitation(operation.param1);
+                this._leaveGroup(operation.param1);
             }
         }
         this.getOprationType(operation);
